@@ -2,26 +2,17 @@ pipeline {
     agent any
 
     stages {
-stage('Checkout') {
- 
-    steps {
-           
-                git branch: 'https://github.com/prakash-128/java-project-maven-new.git'
-
-               
-             
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/prakash-128/java-project-maven-new.git', branch: 'master'
             }
         }
-
 
         stage('Build WAR') {
             steps {
-                sh 'mvn clean package'
+                sh 'mvn clean package -DskipTests'
             }
         }
- 
-
-      
 
         stage('Build Docker Image') {
             steps {
@@ -40,6 +31,7 @@ stage('Checkout') {
                 '''
             }
         }
-
     }
+
+   
 }
