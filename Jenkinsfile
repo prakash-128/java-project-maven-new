@@ -1,5 +1,12 @@
 pipeline {
     agent any
+
+    environment {
+        DOCKERHUB_USER = 'your-dockerhub-username'   // 🔁 Replace with your Docker Hub username
+        IMAGE_NAME = 'java-maven-app'                // 🔁 Replace with your desired image name
+        IMAGE_TAG = 'latest'                         // 🔁 Use a version/tag as needed
+    }
+
     stages {
         stage('Checkout') {
             steps {
