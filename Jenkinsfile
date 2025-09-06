@@ -1,12 +1,5 @@
 pipeline {
     agent any
-
-    environment {
-        IMAGE_NAME = 'hotstar'
-        IMAGE_TAG = 'v1'
-        DOCKERHUB_USER = 'your-dockerhub-username'
-    }
-
     stages {
         stage('Checkout') {
             steps {
