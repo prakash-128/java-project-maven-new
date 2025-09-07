@@ -29,15 +29,20 @@ pipeline {
             }
         }
 
-        stage('Test Docker Hub Login') {
+       stage('Test Docker Hub Login') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'your-dockerhub-creds-id', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds', // Replace with your actual credentials ID
+                    usernameVariable: 'prakash128',
+                    passwordVariable: 'prakash9014'
+                )]) {
                     sh '''
                         echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
                     '''
                 }
             }
         }
+
 
         stage('Deploy to Docker Swarm') {
             steps {
