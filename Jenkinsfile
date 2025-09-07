@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_USER = 'your-dockerhub-username'   // 🔁 Replace with your Docker Hub username
+        DOCKERHUB_USER = 'prakash'   // 🔁 Replace with your Docker Hub username
         IMAGE_NAME = 'java-maven-app'                // 🔁 Replace with your desired image name
         IMAGE_TAG = 'latest'                         // 🔁 Use a version/tag as needed
     }
@@ -31,7 +31,7 @@ pipeline {
 
         stage('Push to Docker Hub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'prakash128', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh '''
                         echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
                         docker push $DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG
