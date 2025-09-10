@@ -28,33 +28,5 @@ pipeline {
                 '''
             }
         }
-
-       stage('Test Docker Hub Login') {
-            steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'your-dockerhub-creds-id', // Replace with your actual credentials ID
-                    usernameVariable: 'prakash128',
-                    passwordVariable: 'prakash@9014'
-                )]) {
-                    sh '''
-                        echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
-                    '''
-                }
-            }
-        }
-
-
-        stage('Deploy to Docker Swarm') {
-            steps {
-                sh '''
-                    docker service rm hotstar-service || true
-
-                    docker service create \
-                        --name hotstar-service \
-                        --publish 9943:8080 \
-                        $DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG
-                '''
-            }
-        }
     }
 }
