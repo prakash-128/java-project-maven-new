@@ -2,11 +2,9 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_USER = 'prakash128'   // 🔁 Replace with your Docker Hub username
-        IMAGE_NAME     = 'java-maven-app'
-        IMAGE_TAG      = 'latest'
-        CONTAINER_NAME = 'java-maven-container'
-        APP_PORT       = '8080'  // Adjust if your app uses a different port
+        IMAGE_NAME = 'hotstar'
+        IMAGE_TAG = 'v1'
+        DOCKERHUB_USER = 'your-dockerhub-username'
     }
 
     stages {
@@ -31,15 +29,26 @@ pipeline {
             }
         }
 
-        stage('Run Docker Container') {
+        stage('Push to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh '''
+                        echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
+                        docker push $DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy to Docker Swarm') {
             steps {
                 sh '''
-                    # Stop and remove old container if it exists
-                    docker stop $CONTAINER_NAME || true
-                    docker rm $CONTAINER_NAME || true
+                    docker service rm hotstar-service || true
 
-                    # Run new container
-                    docker run -d --name $CONTAINER_NAME -p $APP_PORT:8080 $DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG
+                    docker service create \
+                        --name hotstar-service \
+                        --publish 9943:8080 \
+                        $DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG
                 '''
             }
         }
