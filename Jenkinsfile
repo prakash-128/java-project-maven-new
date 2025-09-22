@@ -20,25 +20,6 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                sh '''
-                    docker rmi -f $DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG || true
-                    docker build -t $DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG .
-                '''
-            }
-        }
-        stage('Deploy to Docker Swarm') {
-            steps {
-                sh '''
-                    docker service rm hotstar-service || true
-
-                    docker service create \
-                        --name hotstar-service \
-                        --publish 9943:8080 \
-                        $DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG
-                '''
-            }
-        }
+        
     }
 }
