@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = 'your-dockerhub-creds-id'   // Jenkins credentials ID for Docker Hub
-        DOCKER_IMAGE = 'your-dockerhub-username/hotstar:v1'
+        DOCKER_IMAGE = 'prakash128/hotstar:v1'
     }
 
     stages {
@@ -49,7 +49,7 @@ pipeline {
                 script {
                     sh """
                         docker service update --image ${DOCKER_IMAGE} hotstar_service || \
-                        docker service create --name hotstar_service -p 8080:8080 ${DOCKER_IMAGE}
+                        docker service create --name hotstar_service -p 7989:8080 ${DOCKER_IMAGE}
                     """
                 }
             }
