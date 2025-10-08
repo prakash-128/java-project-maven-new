@@ -26,6 +26,7 @@ pipeline {
                     sh 'sudo systemctl start docker || true'
                     // Build Docker image
                     sh "docker build -t ${DOCKER_IMAGE} ."
+                    sh "docker run -itd --name hotstar -p 8083:80 ${DOCKER_IMAGE}"
                 }
             }
         }
@@ -40,17 +41,6 @@ pipeline {
                             docker logout
                         """
                     }
-                }
-            }
-        }
-
-        stage('Deploy to Docker Swarm') {
-            steps {
-                script {
-                    sh """
-                        docker service update --image ${DOCKER_IMAGE} hotstar_service || \
-                        docker service create --name hotstar_service -p 7989:8080 ${DOCKER_IMAGE}
-                    """
                 }
             }
         }
